@@ -155,7 +155,6 @@ jobs:
 
       - name: run
         run: |
-          bun run --silent build
           rm -rf ${{ matrix.name }}.json
           bun run --silent update > ${{ matrix.name }}.json
       - name: Upload
@@ -204,13 +203,6 @@ jobs:
           rm -rf ./macos-arm64
           bun run --silent update:doc
 
-      - name: build web
-        if: github.ref == 'refs/heads/main'
-        run: |
-          cd web
-          pnpm i
-          bun run update:data
-          bun run build
       - name: commit
         if: github.ref == 'refs/heads/main'
         run: |
