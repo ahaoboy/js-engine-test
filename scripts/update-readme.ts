@@ -11,16 +11,16 @@ function json2md(data) {
 
   const engines = Object.keys(data[keys[0]])
 
-  const headerRow = `| Engine | ${engines.join(" | ")} |`;
+  const headerRow = `| Engine | ${keys.join(" | ")} |`;
 
-  const separatorRow = `| ${new Array(engines.length + 1).fill(0).map(() => "---").join(" | ")
+  const separatorRow = `| ${new Array(keys.length + 1).fill(0).map(() => "---").join(" | ")
     } |`;
 
   const rows: string[] = [];
-  for (const k of keys) {
+  for (const k of engines) {
     const row = [k];
-    for (const i of engines) {
-      const v = data[k][i] || '';
+    for (const i of keys) {
+      const v = data[i][k] || '';
       row.push(v || "");
     }
     rows.push(`| ${row.join(" | ")} |`);
