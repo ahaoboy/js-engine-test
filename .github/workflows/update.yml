@@ -1,0 +1,245 @@
+name: update
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - "main"
+  schedule:
+    - cron: "0 0 * * *"
+  pull_request:
+  workflow_dispatch:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+defaults:
+  run:
+    shell: bash -CeEuo pipefail {0}
+
+jobs:
+  bench:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macos-arm64
+            os: macos-15
+          - name: windows
+            os: windows-latest
+          - name: ubuntu
+            os: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
+    name: bench-${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: latest
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      # jjs
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin" # See 'Supported distributions' for available options
+          java-version: "21"
+      - name: install dep
+        if: matrix.os == 'ubuntu-24.04'
+        run: |
+          sudo apt install -y libcurl4-openssl-dev libssl-dev zlib1g-dev
+
+      - name: install easy-install
+        uses: ahaoboy/easy-setup@v1
+        with:
+          url: |-
+            https://github.com/ahaoboy/easy-install
+            https://github.com/ahaoboy/easy-install/raw/refs/heads/main/dist-manifest/boa.json
+            https://github.com/ahaoboy/easy-install/raw/refs/heads/main/dist-manifest/llrt.json
+            https://github.com/ahaoboy/easy-install/raw/refs/heads/main/dist-manifest/hermes.json
+            https://github.com/ahaoboy/easy-install/raw/refs/heads/main/dist-manifest/xst.json
+            https://github.com/ahaoboy/txiki.js-build
+            https://github.com/ahaoboy/spidermonkey-build
+            https://github.com/ahaoboy/v8-build
+            https://github.com/ahaoboy/jerryscript-build
+            https://github.com/ahaoboy/mujs-build
+            https://github.com/ahaoboy/mujs-one
+            https://github.com/ahaoboy/mujs-pgo-build
+            https://github.com/ahaoboy/rquickjs-cli
+            https://github.com/ahaoboy/ChakraCore-build
+            https://github.com/ahaoboy/jsc-build
+            https://github.com/ahaoboy/goja-build
+            https://github.com/ahaoboy/kiesel-build
+            https://github.com/ahaoboy/mozjs-cli
+            https://github.com/ahaoboy/jint-cli
+            https://github.com/aalykiot/dune
+            https://github.com/ahaoboy/duktape-build
+            https://github.com/ahaoboy/njs-build
+            https://github.com/ahaoboy/spiderfire-build
+            https://github.com/ahaoboy/lo-build
+            https://github.com/trynova/nova
+            https://nightly.link/andrewmd5/hako-cli/workflows/build/llvm?preview
+            https://github.com/ahaoboy/bare-build
+            https://github.com/ahaoboy/rqjs-pgo-build
+
+      - name: install rhino
+        run: |
+          curl -L -o ~/.ei/rhino.jar https://github.com/ahaoboy/rhino-cli/releases/latest/download/rhino-all-1.8.1-20250614.122300-24.jar
+          echo '#!/bin/bash' > ~/.ei/rhino.sh
+          echo 'java -jar ~/.ei/rhino.jar "$@"' >> ~/.ei/rhino.sh
+          chmod 777 ~/.ei/rhino.sh
+
+      - name: install ladybird
+        if: matrix.os == 'ubuntu-24.04' || matrix.os == 'macos-15'
+        run: |
+          ei https://github.com/ahaoboy/ladybird-js-build
+          mv ~/.ei/js ~/.ei/ladybird
+      # - name: install by npm
+      #   run: |
+      #     # npm i -g bare
+      #     npm i -g @engine262/engine262
+      #     npm i -g quickjs-emscripten-cli
+      - name: install by bun
+        run: |
+          bun i -g @engine262/engine262
+          bun i -g quickjs-emscripten-cli
+
+      - name: install unix
+        if: "!startsWith(matrix.os, 'windows')"
+        run: |
+          ei https://github.com/ahaoboy/primjs-build
+          mv ~/.ei/qjs ~/.ei/primjs
+
+          ei https://github.com/ringo/ringojs/releases/download/v4.0.0/ringojs-4.0.0.tar.gz
+
+      # - name: install windows
+      #   if: "startsWith(matrix.os, 'windows')"
+      #   run: |
+      #     ei https://github.com/ringo/ringojs/releases/download/v4.0.0/ringojs-4.0.0.zip
+
+      # - name: install ubuntu x64
+      #   if: "startsWith(matrix.os, 'ubuntu')"
+      #   run: |
+      #     ei https://nightly.link/andrewmd5/hako-cli/workflows/build/main/hako-linux-x86_64.zip
+
+
+      - name: install macos arm64
+        if: "startsWith(matrix.os, 'macos-15')"
+        run: |
+          ei https://nightly.link/andrewmd5/hako-cli/workflows/build/main/hako-macos-arm64.zip
+
+      - name: install
+        run: |
+          ei https://github.com/ahaoboy/easy-install/raw/refs/heads/main/dist-manifest/quickjs-ng.json
+          mv ~/.ei/qjs ~/.ei/qjs-ng
+          mv ~/.ei/qjsc ~/.ei/qjsc-ng
+
+          ei https://github.com/ahaoboy/quickjs-build
+
+          ei https://github.com/ahaoboy/easy-install/raw/refs/heads/main/dist-manifest/graaljs.json
+          mv ~/.ei/graaljs/bin/js ~/.ei/graaljs/bin/graaljs
+
+      - name: Set JavaScriptCore environment variable only on macOS
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          echo "DYLD_FRAMEWORK_PATH=/Users/runner/.ei/JavaScriptCore/bin" >> $GITHUB_ENV
+          echo "DYLD_LIBRARY_PATH=/Users/runner/.ei/JavaScriptCore/bin" >> $GITHUB_ENV
+
+      - name: run
+        run: |
+          bun run --silent build
+          rm -rf ${{ matrix.name }}.json
+          bun run --silent update > ${{ matrix.name }}.json
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: ./${{ matrix.name }}.json
+  update:
+    needs: ["bench"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/download-artifact@v4
+        with:
+          path: windows
+          pattern: windows
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          path: ubuntu
+          pattern: ubuntu
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          path: macos-arm64
+          pattern: macos-arm64
+          merge-multiple: true
+
+      - name: update json
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mv ./ubuntu/ubuntu.json ./ubuntu.json
+          mv ./windows/windows.json ./windows.json
+          mv ./macos-arm64/macos-arm64.json ./macos-arm64.json
+          rm -rf ./ubuntu
+          rm -rf ./windows
+          rm -rf ./macos-arm64
+          bun run --silent update:doc
+
+      - name: build web
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd web
+          pnpm i
+          bun run update:data
+          bun run build
+      - name: commit
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.email "504595380@qq.com"
+          git config --global user.name "ahaoboy-ci"
+          git add .
+          git commit -m"update"
+          cat README.md
+
+      - name: Upload README
+        uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          name: README
+          path: README.md
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+      - name: Deploy to doc branch
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./web/dist
+          publish_branch: doc
+          force_orphan: true
+          cname: github.com
