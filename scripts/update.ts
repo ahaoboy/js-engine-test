@@ -7,7 +7,7 @@ import process from "node:process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-const execList = ["mujs"]
+const execList = info.map((i) => i.bin || i.name);
 
 const subCmd = {
   "tjs": "run",
