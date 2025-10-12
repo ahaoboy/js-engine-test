@@ -1,113 +1,113 @@
 
 ## test
-10/11/2025, 1:24:56 AM
+10/12/2025, 1:30:16 AM
 
 ### ubuntu
 | Engine | values | reassign |
 | --- | --- | --- |
 | bun | 2 | 11 |
-| node | 39 | 21 |
-| deno | 36 | 19 |
-| graaljs | 14 | 100 |
-| hermes | 7 | 13 |
-| llrt | 8 | 17 |
+| node | 34 | 19 |
+| deno | 34 | 19 |
+| graaljs | 14 | 98 |
+| hermes | 8 | 13 |
+| llrt | 7 | 17 |
 | txiki.js | 7 | 16 |
-| quickjs | 5 | 15 |
-| quickjs-ng | 6 | 17 |
-| mujs |  | 29 |
+| quickjs | 6 | 16 |
+| quickjs-ng | 7 | 17 |
+| mujs |  | 27 |
 | mujs-pgo |  | 21 |
-| mujs-one |  | 31 |
-| xst | 13759 | 14043 |
+| mujs-one |  | 34 |
+| xst | 13834 | 14045 |
 | JavaScriptCore | 2 | 12 |
-| v8 | 30 | 17 |
-| spidermonkey | 1 | 5 |
+| v8 | 30 | 16 |
+| spidermonkey | 1 | 6 |
 | JerryScript |  |  |
 | primjs | 7 | 19 |
-| rquickjs | 8 | 17 |
-| rquickjs-pgo | 7 | 17 |
-| ChakraCore | 43 | 41 |
-| duktape |  | 24 |
-| nova | 2426 | 3382 |
-| boa | 27 | 145 |
-| engine262 | 3724 | 20333 |
-| ladybird | [35;1m13[0m | [35;1m63[0m |
+| rquickjs | 7 | 18 |
+| rquickjs-pgo | 7 | 19 |
+| ChakraCore | 45 | 40 |
+| duktape |  | 25 |
+| nova | 2410 | 3267 |
+| boa | 25 | 139 |
+| engine262 | 3744 | 20346 |
+| ladybird | [35;1m11[0m | [35;1m61[0m |
 | goja |  |  |
-| kiesel | 19 | 153 |
-| mozjs | 2 | 6 |
-| jint | 31 | 198 |
-| dune | [33m36[0m | [33m19[0m |
-| jjs |  | 152 |
+| kiesel | 22 | 123 |
+| mozjs | 2 | 5 |
+| jint | 47 | 196 |
+| dune | [33m38[0m | [33m19[0m |
+| jjs |  | 213 |
 | njs | 5 | 16 |
-| ringo | 45 | 137 |
-| lo | 39 | 19 |
-| spiderfire | 1 | 5 |
-| bare | 49 | 22 |
+| ringo | 43 | 100 |
+| lo | 37 | 19 |
+| spiderfire | 2 | 5 |
+| bare | 42 | 19 |
 | hako |  |  |
 | quickjs-emscripten | 16 | 36 |
 ### macos-arm64
 | Engine | reassign | values |
 | --- | --- | --- |
-| bun | 21 | 1 |
-| node | 19 | 44 |
-| deno | 15 | 51 |
-| graaljs | 171 | 24 |
-| hermes | 15 | 7 |
-| llrt | 22 | 14 |
-| txiki.js | 12 | 6 |
-| quickjs | 22 | 4 |
-| quickjs-ng | 11 | 6 |
-| mujs | 31 |  |
-| xst | 18224 | 23455 |
-| JavaScriptCore | 13 | 1 |
-| v8 | 35 | 36 |
-| spidermonkey | 17 | 2 |
+| bun | 7 | 1 |
+| node | 14 | 26 |
+| deno | 16 | 24 |
+| graaljs | 99 | 12 |
+| hermes | 10 | 5 |
+| llrt | 11 | 5 |
+| txiki.js | 10 | 4 |
+| quickjs | 10 | 4 |
+| quickjs-ng | 10 | 4 |
+| mujs | 30 |  |
+| xst | 15380 | 14121 |
+| JavaScriptCore | 11 | 1 |
+| v8 | 14 | 20 |
+| spidermonkey | 6 | 1 |
 | JerryScript |  |  |
-| primjs | 20 | 8 |
-| rquickjs | 19 | 6 |
-| duktape | 20 |  |
-| nova | 4774 | 3269 |
-| engine262 | 20186 | 3764 |
-| ladybird | [35;1m85[0m | [35;1m22[0m |
+| primjs | 17 | 5 |
+| rquickjs | 11 | 4 |
+| duktape | 12 |  |
+| nova | 2915 | 2433 |
+| engine262 | 12302 | 2405 |
+| ladybird | [35;1m43[0m | [35;1m12[0m |
 | goja |  |  |
-| kiesel | 135 | 28 |
-| mozjs | 7 | 1 |
-| jint | 225 | 67 |
-| dune | [33m25[0m | [33m66[0m |
-| jjs | 243 |  |
-| njs | 24 | 4 |
-| ringo | 106 | 42 |
-| spiderfire | 6 | 2 |
-| bare | 29 | 51 |
+| kiesel | 89 | 13 |
+| mozjs | 4 | 1 |
+| jint | 160 | 27 |
+| dune | [33m15[0m | [33m26[0m |
+| jjs | 151 |  |
+| njs | 10 | 3 |
+| ringo | 69 | 33 |
+| spiderfire | 4 | 1 |
+| bare | 15 | 33 |
 | hako |  |  |
-| quickjs-emscripten | 55 | 13 |
+| quickjs-emscripten | 26 | 10 |
 ### windows
 | Engine | reassign | values |
 | --- | --- | --- |
-| bun | 19 | 2 |
-| node | 29 | 58 |
-| deno | 24 | 45 |
-| graaljs | 103 | 14 |
-| hermes | 24 | 13 |
-| llrt | 52 | 23 |
-| txiki.js | 32 | 12 |
-| quickjs | 47 | 15 |
-| quickjs-ng | 42 | 18 |
-| mujs | 31 |  |
-| mujs-pgo | 32 |  |
+| bun | 15 | 1 |
+| node | 24 | 39 |
+| deno | 20 | 34 |
+| graaljs | 87 | 9 |
+| hermes | 23 | 12 |
+| llrt | 28 | 12 |
+| txiki.js | 24 | 10 |
+| quickjs | 26 | 9 |
+| quickjs-ng | 24 | 10 |
+| mujs | 28 |  |
+| mujs-pgo | 28 |  |
 | xst |  |  |
-| JavaScriptCore | 14 | 1 |
+| JavaScriptCore | 12 | 2 |
 | v8 | 18 | 30 |
-| spidermonkey | 5 | 1 |
-| rquickjs | 47 | 16 |
-| rquickjs-pgo | 38 | 20 |
-| ChakraCore | 34 | 45 |
-| duktape | 72 |  |
-| nova | 3711 | 2456 |
-| boa | 214 | 30 |
-| engine262 | 22332 | 4273 |
+| spidermonkey | 6 | 1 |
+| rquickjs | 30 | 16 |
+| rquickjs-pgo | 34 | 15 |
+| ChakraCore | 36 | 43 |
+| duktape | 62 |  |
+| nova | 3608 | 2551 |
+| boa | 210 | 27 |
+| engine262 | 24018 | 4029 |
 | goja |  |  |
-| kiesel | 253 | 20 |
-| jint | 234 | 57 |
-| dune | [33m20[0m | [33m39[0m |
+| kiesel | 146 | 31 |
+| jint | 273 | 59 |
+| dune | [33m20[0m | [33m35[0m |
 | spiderfire | 6 | 1 |
-| quickjs-emscripten | 42 | 20 |
+| quickjs-emscripten | 35 | 16 |
